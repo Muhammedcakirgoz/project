@@ -41,12 +41,12 @@ public class LocationController {
         return ResponseEntity.ok(list);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{name}")
     public ResponseEntity<Void> deleteLocation(
-            @PathVariable Long id,
+            @PathVariable String name,
             @AuthenticationPrincipal UserDetails userDetails) {
 
-        locationService.deleteLocation(id, userDetails.getUsername());
+        locationService.deleteLocationByName(name, userDetails.getUsername());
         return ResponseEntity.noContent().build();
     }
 }

@@ -30,6 +30,7 @@ public class LocationServiceImpl implements LocationService {
         this.request = request;
     }
 
+    /** Header’daki Bearer JWT’den şu anki kullanıcıyı alır */
     private User currentUser() {
         String token = jwtService.extractTokenFromHeader(request);
         String email = jwtService.extractUsername(token);
@@ -43,6 +44,7 @@ public class LocationServiceImpl implements LocationService {
                 .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı!"));
 
         Location loc = new Location();
+        loc.setName(req.getName());              // yeni ek: name alanı
         loc.setLatitude(req.getLatitude());
         loc.setLongitude(req.getLongitude());
         loc.setUser(user);
@@ -57,14 +59,14 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public void deleteLocation(Long locationId, String userEmail) {
+    public void deleteLocationByName(String locationName, String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı!"));
-        Location loc = locationRepository.findById(locationId)
-                .orElseThrow(() -> new RuntimeException("Konum bulunamadı!"));
-        if (!loc.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("Yetkisiz işlem!");
-        }
+
+        Location loc = locationRepository
+                .findByUserAndName(user, locationName)
+                .orElseThrow(() -> new RuntimeException("Konum bulunamadı: " + locationName));
+
         locationRepository.delete(loc);
     }
 }

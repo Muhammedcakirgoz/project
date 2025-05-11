@@ -6,10 +6,25 @@ import com.example.demo.model.Location;
 import java.util.List;
 
 public interface LocationService {
-    // Android tarafı için kullanıcı e-posta adresini parametre olarak da geçelim:
+    /**
+     * Yeni bir konum ekler.
+     * @param req       Latitude/longitude ve name bilgilerini içeren DTO
+     * @param userEmail Authenticated kullanıcının e-posta adresi
+     * @return Kaydedilen Location nesnesi
+     */
     Location addLocation(LocationRequest req, String userEmail);
 
+    /**
+     * Kullanıcının tüm favori konumlarını getirir.
+     * @param userEmail Authenticated kullanıcının e-posta adresi
+     * @return Kullanıcının kaydettiği tüm Location listesi
+     */
     List<Location> getLocations(String userEmail);
 
-    void deleteLocation(Long locationId, String userEmail);
+    /**
+     * Kullanıcının favori konumlarından belirtilen ada sahip olanı siler.
+     * @param locationName Silinecek konumun “name” alanı
+     * @param userEmail    Authenticated kullanıcının e-posta adresi
+     */
+    void deleteLocationByName(String locationName, String userEmail);
 }
