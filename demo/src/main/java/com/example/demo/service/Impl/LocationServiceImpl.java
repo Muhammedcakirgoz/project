@@ -10,6 +10,8 @@ import com.example.demo.service.LocationService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LocationServiceImpl implements LocationService {
 
@@ -28,17 +30,41 @@ public class LocationServiceImpl implements LocationService {
         this.request = request;
     }
 
-    @Override
-    public void saveLocation(LocationRequest locationRequest) {
+    private User currentUser() {
         String token = jwtService.extractTokenFromHeader(request);
         String email = jwtService.extractUsername(token);
-        User user = userRepository.findByEmail(email)
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı!"));
+    }
+
+    @Override
+    public Location addLocation(LocationRequest req, String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı!"));
 
-        Location location = new Location();
-        location.setLatitude(locationRequest.getLatitude());
-        location.setLongitude(locationRequest.getLongitude());
-        location.setUser(user); // Konumu kullanıcıya bağla
-        locationRepository.save(location);
+        Location loc = new Location();
+        loc.setLatitude(req.getLatitude());
+        loc.setLongitude(req.getLongitude());
+        loc.setUser(user);
+        return locationRepository.save(loc);
+    }
+
+    @Override
+    public List<Location> getLocations(String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı!"));
+        return locationRepository.findAllByUser(user);
+    }
+
+    @Override
+    public void deleteLocation(Long locationId, String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı!"));
+        Location loc = locationRepository.findById(locationId)
+                .orElseThrow(() -> new RuntimeException("Konum bulunamadı!"));
+        if (!loc.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Yetkisiz işlem!");
+        }
+        locationRepository.delete(loc);
     }
 }

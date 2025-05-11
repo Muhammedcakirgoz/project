@@ -2,36 +2,51 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.LocationRequest;
 import com.example.demo.model.Location;
-import com.example.demo.model.User;
-import com.example.demo.repository.LocationRepository;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.service.LocationService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api/location")
-public class LocationController {
-    private final LocationRepository locationRepository;
-    private final LocationService locationService;
-    private final UserRepository userRepository;
+import jakarta.validation.Valid;
+import java.util.List;
 
-    public LocationController(LocationRepository locationRepository, LocationService locationService, UserRepository userRepository) {
-        this.locationRepository = locationRepository;
+@RestController
+@RequestMapping("/api/locations")
+public class LocationController {
+
+    private final LocationService locationService;
+
+    public LocationController(LocationService locationService) {
         this.locationService = locationService;
-        this.userRepository = userRepository;
     }
 
     @PostMapping
-    public ResponseEntity<?> saveLocation(@RequestBody LocationRequest locationRequest, @AuthenticationPrincipal UserDetails userDetails) {
-        User user = userRepository.findByEmail(userDetails.getUsername()).orElseThrow();
-        Location location = new Location();
-        location.setLatitude(locationRequest.getLatitude());
-        location.setLongitude(locationRequest.getLongitude());
-        location .setUser(user);
-        locationRepository.save(location);
-        return ResponseEntity.ok(location);
+    public ResponseEntity<Location> addLocation(
+            @Valid @RequestBody LocationRequest req,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        Location created = locationService.addLocation(req, userDetails.getUsername());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(created);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Location>> listLocations(
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        List<Location> list = locationService.getLocations(userDetails.getUsername());
+        return ResponseEntity.ok(list);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteLocation(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        locationService.deleteLocation(id, userDetails.getUsername());
+        return ResponseEntity.noContent().build();
     }
 }

@@ -28,11 +28,6 @@ public class StreamController {
         this.request     = request;
     }
 
-    @GetMapping("/notifications")
-    public SseEmitter streamNotifications() {
-        Long userId = resolveUserId();
-        return sseService.createEmitter(userId);
-    }
 
     @GetMapping("/routes")
     public SseEmitter streamRoutes() {

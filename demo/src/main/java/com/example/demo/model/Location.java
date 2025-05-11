@@ -13,12 +13,25 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private double latitude;
+    @Column(nullable = false)
     private double longitude;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Column(nullable = false)
+    private String name;      // Örn. “Ev”, “Ofis” vb.
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public User getUser() {
         return user;
