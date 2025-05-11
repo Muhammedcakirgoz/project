@@ -35,9 +35,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthResponse register(RegisterRequest request) {
         // 1) Aynı email daha önce kullanılmış mı?
         userRepository.findByEmail(request.getEmail())
-                .ifPresent(u -> {
-                    throw new IllegalStateException("Email already in use");
-                });
+                .ifPresent(u -> { throw new IllegalStateException("Email already in use"); });
 
         // 2) Yeni kullanıcı oluştur
         User user = new User();
@@ -50,22 +48,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // 3) DB'ye kaydet
         userRepository.save(user);
 
-        // 4) JWT üret
-        String token = jwtService.generateToken(user);
+        // 4) JWT üret — artık iki parametre geçiyoruz
+        String token = jwtService.generateToken(user.getEmail(), user.getRole().name());
         return new AuthResponse(token);
     }
 
     @Override
     public AuthResponse login(AuthRequest request) {
+        // 1) AuthenticationManager ile kimlik doğrula
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
+        // 2) Kullanıcıyı bulun
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalStateException("User not found"));
-        String token = jwtService.generateToken(user);
+        // 3) Yeni token üret, yine iki parametreyle
+        String token = jwtService.generateToken(user.getEmail(), user.getRole().name());
         return new AuthResponse(token);
     }
 }
