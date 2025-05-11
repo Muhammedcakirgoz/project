@@ -3,9 +3,11 @@ package com.example.demo.dto;
 public class TransitRequest {
     private String origin;
     private String destination;
+
     // …
     // Parametresiz ctor (Spring için gerekli)
-    public TransitRequest() {}
+    public TransitRequest() {
+    }
 
     // ✔️ Sizin çağrınıza uyacak ctor:
     public TransitRequest(String origin, String destination) {
@@ -29,4 +31,3 @@ public class TransitRequest {
         this.destination = destination;
     }
 }
-
