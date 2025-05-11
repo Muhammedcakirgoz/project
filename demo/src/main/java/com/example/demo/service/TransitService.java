@@ -1,8 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.TransitRequest;
-import com.example.demo.dto.TransitResponse;
+import com.example.demo.model.TransitResponse;
 
 public interface TransitService {
-    TransitResponse getAndSaveTransit(TransitRequest req);
+    TransitResponse getTransitInfo(String origin, String destination);
 }
