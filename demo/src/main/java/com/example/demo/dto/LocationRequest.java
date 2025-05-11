@@ -19,5 +19,6 @@ public class LocationRequest {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
-// getter & setter
+
+
 }

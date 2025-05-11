@@ -4,7 +4,6 @@ import com.example.demo.dto.ErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -46,23 +45,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    // 2) JSON parse hataları
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(
-            HttpMessageNotReadableException ex,
-            WebRequest request) {
-
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        ErrorResponse body = new ErrorResponse(
-                Instant.now(),
-                status.value(),
-                status.getReasonPhrase(),
-                ex.getMostSpecificCause().getMessage(),        // message
-                request.getDescription(false).replace("uri=", ""),
-                List.of(ex.getMostSpecificCause().getMessage())// details
-        );
-        return new ResponseEntity<>(body, status);
-    }
+//    // 2) JSON parse hataları
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+//    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(
+//            HttpMessageNotReadableException ex,
+//            WebRequest request) {
+//
+//        HttpStatus status = HttpStatus.BAD_REQUEST;
+//        ErrorResponse body = new ErrorResponse(
+//                Instant.now(),
+//                status.value(),
+//                status.getReasonPhrase(),
+//                ex.getMostSpecificCause().getMessage(),        // message
+//                request.getDescription(false).replace("uri=", ""),
+//                List.of(ex.getMostSpecificCause().getMessage())// details
+//        );
+//        return new ResponseEntity<>(body, status);
+//    }
 
     // 3) Not found
     @ExceptionHandler({NoSuchElementException.class, EntityNotFoundException.class})

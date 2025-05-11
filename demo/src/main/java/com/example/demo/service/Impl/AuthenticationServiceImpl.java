@@ -33,13 +33,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthResponse register(RegisterRequest request) {
+        // 1) Aynı email daha önce kullanılmış mı?
         userRepository.findByEmail(request.getEmail())
-                .ifPresent(u -> { throw new IllegalStateException("Email already in use"); });
+                .ifPresent(u -> {
+                    throw new IllegalStateException("Email already in use");
+                });
+
+        // 2) Yeni kullanıcı oluştur
         User user = new User();
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.USER);
+
+        // 3) DB'ye kaydet
         userRepository.save(user);
+
+        // 4) JWT üret
         String token = jwtService.generateToken(user);
         return new AuthResponse(token);
     }
