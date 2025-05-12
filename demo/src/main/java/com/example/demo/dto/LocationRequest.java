@@ -12,12 +12,14 @@ public class LocationRequest {
 
     @NotNull
     private Double longitude;
-    
+
     private String address;
-    
+
     private String notes;
-    
+
     private String timestamp;
+
+    private Long id;
 
     public String getAddress() {
         return address;
@@ -73,5 +75,13 @@ public class LocationRequest {
 
     public void setLongitude(@NotNull Double longitude) {
         this.longitude = longitude;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

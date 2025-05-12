@@ -23,9 +23,9 @@ public class LocationServiceImpl implements LocationService {
     private final HttpServletRequest request;
 
     public LocationServiceImpl(LocationRepository locationRepository,
-                               UserRepository userRepository,
-                               JwtService jwtService,
-                               HttpServletRequest request) {
+            UserRepository userRepository,
+            JwtService jwtService,
+            HttpServletRequest request) {
         this.locationRepository = locationRepository;
         this.userRepository = userRepository;
         this.jwtService = jwtService;
@@ -45,22 +45,29 @@ public class LocationServiceImpl implements LocationService {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı!"));
 
-        Location loc = new Location();
-        loc.setName(req.getName());              
+        Location loc;
+        if (req.getId() != null) {
+            // Eğer id varsa, önce veritabanında var mı bak
+            loc = locationRepository.findById(req.getId()).orElse(new Location());
+        } else {
+            loc = new Location();
+        }
+
+        loc.setName(req.getName());
         loc.setLatitude(req.getLatitude());
         loc.setLongitude(req.getLongitude());
-        
+
         // Yeni alanları ekle
         if (req.getAddress() != null) {
             loc.setAddress(req.getAddress());
         } else {
-            loc.setAddress(""); // Adres null olamayacağı için boş string kullanıyoruz
+            loc.setAddress("");
         }
-        
+
         if (req.getNotes() != null) {
             loc.setNotes(req.getNotes());
         }
-        
+
         // Timestamp ile ilgili kısım
         if (req.getTimestamp() != null && !req.getTimestamp().isEmpty()) {
             try {
@@ -68,11 +75,10 @@ public class LocationServiceImpl implements LocationService {
                 Date timestamp = sdf.parse(req.getTimestamp());
                 loc.setTimestamp(timestamp);
             } catch (Exception e) {
-                // Parse hatası durumunda, timestamp null bırakılır ve @CreationTimestamp kullanılır
                 System.out.println("Timestamp parse edilemedi: " + e.getMessage());
             }
         }
-        
+
         loc.setUser(user);
         return locationRepository.save(loc);
     }
