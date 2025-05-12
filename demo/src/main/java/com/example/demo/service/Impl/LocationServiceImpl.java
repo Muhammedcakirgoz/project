@@ -10,8 +10,11 @@ import com.example.demo.service.LocationService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
+<<<<<<< HEAD
 import java.text.SimpleDateFormat;
 import java.util.Date;
+=======
+>>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f
 import java.util.List;
 
 @Service
@@ -32,7 +35,11 @@ public class LocationServiceImpl implements LocationService {
         this.request = request;
     }
 
+<<<<<<< HEAD
     /** Header'daki Bearer JWT'den şu anki kullanıcıyı alır */
+=======
+    /** Header’daki Bearer JWT’den şu anki kullanıcıyı alır */
+>>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f
     private User currentUser() {
         String token = jwtService.extractTokenFromHeader(request);
         String email = jwtService.extractUsername(token);
@@ -46,6 +53,7 @@ public class LocationServiceImpl implements LocationService {
                 .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı!"));
 
         Location loc = new Location();
+<<<<<<< HEAD
         loc.setName(req.getName());              
         loc.setLatitude(req.getLatitude());
         loc.setLongitude(req.getLongitude());
@@ -73,6 +81,11 @@ public class LocationServiceImpl implements LocationService {
             }
         }
         
+=======
+        loc.setName(req.getName());              // yeni ek: name alanı
+        loc.setLatitude(req.getLatitude());
+        loc.setLongitude(req.getLongitude());
+>>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f
         loc.setUser(user);
         return locationRepository.save(loc);
     }
@@ -95,4 +108,8 @@ public class LocationServiceImpl implements LocationService {
 
         locationRepository.delete(loc);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f

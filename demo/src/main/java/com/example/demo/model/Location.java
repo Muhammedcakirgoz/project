@@ -1,9 +1,13 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+<<<<<<< HEAD
 import java.util.Date;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+=======
+import lombok.*;
+>>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f
 
 @Entity
 @Data
@@ -17,7 +21,10 @@ public class Location {
 
     @Column(nullable = false)
     private double latitude;
+<<<<<<< HEAD
     
+=======
+>>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f
     @Column(nullable = false)
     private double longitude;
 
@@ -26,6 +33,7 @@ public class Location {
     private User user;
 
     @Column(nullable = false)
+<<<<<<< HEAD
     private String name;      // Örn. "Ev", "Ofis" vb.
     
     @Column(nullable = false)
@@ -60,6 +68,9 @@ public class Location {
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
+=======
+    private String name;      // Örn. “Ev”, “Ofis” vb.
+>>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f
 
     public String getName() {
         return name;
@@ -72,7 +83,10 @@ public class Location {
     public User getUser() {
         return user;
     }
+<<<<<<< HEAD
     
+=======
+>>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f
     public void setUser(User user) {
         this.user = user;
     }
