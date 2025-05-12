@@ -1,1 +1,1 @@
-Bu bir test dosyasıdır.
+GitHub bağlantı testi
