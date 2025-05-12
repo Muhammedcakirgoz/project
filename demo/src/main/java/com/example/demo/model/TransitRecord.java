@@ -10,9 +10,7 @@ public class TransitRecord {
     private String destination;
 
     @Lob
-    private String payload; // Python’dan gelen ham JSON
-
-    // getters & setters omitted
+    private String payload; // Python'dan gelen ham JSON
 
     public Long getId() {
         return id;

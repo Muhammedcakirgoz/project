@@ -1,16 +1,20 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import java.util.ArrayList;
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class TransitResponse {
     private boolean error;
+    private String status;
     private String message;
     private String details;
     private Summary summary;
-    private List<Step> steps;
+    
+    @JsonProperty("steps")
+    private List<Step> steps = new ArrayList<>();  // Default boş liste
 
     @Data
     public static class Summary {

@@ -11,19 +11,11 @@ import org.springframework.web.bind.annotation.*;
 public class TransitController {
 
     private final TransitService transitService;
-<<<<<<< HEAD
     
-=======
->>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f
-
     public TransitController(TransitService transitService) {
         this.transitService = transitService;
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f
     @GetMapping
     public ResponseEntity<TransitResponse> getTransitInfo(
             @RequestParam String origin,

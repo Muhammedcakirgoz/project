@@ -12,7 +12,6 @@ public class LocationRequest {
 
     @NotNull
     private Double longitude;
-<<<<<<< HEAD
     
     private String address;
     
@@ -43,8 +42,6 @@ public class LocationRequest {
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
-=======
->>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f
 
     public @NotBlank String getName() {
         return name;
@@ -54,17 +51,6 @@ public class LocationRequest {
         this.name = name;
     }
 
-<<<<<<< HEAD
-=======
-    public void setLatitude(@NotNull Double latitude) {
-        this.latitude = latitude;
-    }
-
-    public void setLongitude(@NotNull Double longitude) {
-        this.longitude = longitude;
-    }
-
->>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f
     public double getLatitude() {
         return latitude;
     }
@@ -73,13 +59,10 @@ public class LocationRequest {
         this.latitude = latitude;
     }
 
-<<<<<<< HEAD
     public void setLatitude(@NotNull Double latitude) {
         this.latitude = latitude;
     }
 
-=======
->>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f
     public double getLongitude() {
         return longitude;
     }
@@ -88,12 +71,7 @@ public class LocationRequest {
         this.longitude = longitude;
     }
 
-<<<<<<< HEAD
     public void setLongitude(@NotNull Double longitude) {
         this.longitude = longitude;
     }
 }
-=======
-
-}
->>>>>>> 21c10867da6cdac9fb7ebc9da7ecf962ca6f6e3f
