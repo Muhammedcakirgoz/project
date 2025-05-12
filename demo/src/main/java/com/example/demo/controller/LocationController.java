@@ -46,6 +46,7 @@ public class LocationController {
             @AuthenticationPrincipal UserDetails userDetails) {
 
         locationService.deleteLocationByName(name, userDetails.getUsername());
+        
         return ResponseEntity.noContent().build();
     }
 }
