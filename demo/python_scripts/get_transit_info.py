@@ -3,6 +3,7 @@ import requests
 import json
 import os
 import urllib.parse
+import polyline
 
 # API anahtarı
 API_KEY = "AIzaSyCGObqinZJ7fug_noyIqFpQswEV6qizCjo"
@@ -97,8 +98,16 @@ def main(origin, destination):
                 "distance": step['distance']['text'],
                 "duration": step['duration']['text'],
                 "instructions": step.get('html_instructions', ''),
-                "polyline": step['polyline']['points'] if 'polyline' in step else ""
+                "polyline": step['polyline']['points'] if 'polyline' in step else "",
+                "polyline_path": []
             }
+            # Polyline decode
+            if 'polyline' in step:
+                try:
+                    coords = polyline.decode(step['polyline']['points'])
+                    step_info["polyline_path"] = [{"lat": lat, "lng": lng} for lat, lng in coords]
+                except Exception:
+                    step_info["polyline_path"] = []
             # Handle sub-steps recursively
             if 'steps' in step:
                 step_info["sub_steps"] = [extract_step_info(sub_step) for sub_step in step['steps']]

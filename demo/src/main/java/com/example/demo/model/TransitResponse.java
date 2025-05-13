@@ -69,6 +69,9 @@ public class TransitResponse {
         @JsonProperty("sub_steps")
         private List<Step> subSteps;
 
+        @JsonProperty("polyline_path")
+        private List<Location> polylinePath;
+
         // Sesli navigasyon için adım talimatı
         @JsonProperty("voice_instruction")
         public String getVoiceInstruction() {
@@ -128,6 +131,14 @@ public class TransitResponse {
 
         public void setPolyline(String polyline) {
             this.polyline = polyline;
+        }
+
+        public List<Location> getPolylinePath() {
+            return polylinePath;
+        }
+
+        public void setPolylinePath(List<Location> polylinePath) {
+            this.polylinePath = polylinePath;
         }
     }
 
