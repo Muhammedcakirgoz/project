@@ -64,6 +64,11 @@ public class TransitResponse {
         @JsonProperty("direction")
         private String direction;
 
+        private String polyline;
+
+        @JsonProperty("sub_steps")
+        private List<Step> subSteps;
+
         // Sesli navigasyon için adım talimatı
         @JsonProperty("voice_instruction")
         public String getVoiceInstruction() {
@@ -115,6 +120,14 @@ public class TransitResponse {
                 return transitDetails.getLine().getShortName();
             }
             return null;
+        }
+
+        public String getPolyline() {
+            return polyline;
+        }
+
+        public void setPolyline(String polyline) {
+            this.polyline = polyline;
         }
     }
 

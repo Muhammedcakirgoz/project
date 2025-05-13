@@ -8,6 +8,7 @@ import java.util.List;
 public interface LocationService {
     /**
      * Yeni bir konum ekler.
+     * 
      * @param req       Latitude/longitude ve name bilgilerini içeren DTO
      * @param userEmail Authenticated kullanıcının e-posta adresi
      * @return Kaydedilen Location nesnesi
@@ -16,6 +17,7 @@ public interface LocationService {
 
     /**
      * Kullanıcının tüm favori konumlarını getirir.
+     * 
      * @param userEmail Authenticated kullanıcının e-posta adresi
      * @return Kullanıcının kaydettiği tüm Location listesi
      */
@@ -23,8 +25,19 @@ public interface LocationService {
 
     /**
      * Kullanıcının favori konumlarından belirtilen ada sahip olanı siler.
-     * @param locationName Silinecek konumun “name” alanı
+     * 
+     * @param locationName Silinecek konumun "name" alanı
      * @param userEmail    Authenticated kullanıcının e-posta adresi
      */
     void deleteLocationByName(String locationName, String userEmail);
+
+    /**
+     * Konumu günceller.
+     * 
+     * @param id        Konumun ID'si
+     * @param req       Latitude/longitude ve name bilgilerini içeren DTO
+     * @param userEmail Authenticated kullanıcının e-posta adresi
+     * @return Güncellenen Location nesnesi
+     */
+    Location updateLocation(Long id, LocationRequest req, String userEmail);
 }

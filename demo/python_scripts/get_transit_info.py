@@ -91,15 +91,17 @@ def main(origin, destination):
         }
 
         steps = data['routes'][0]['legs'][0]['steps']
-        for step in steps:
+        def extract_step_info(step):
             step_info = {
                 "travel_mode": step['travel_mode'],
                 "distance": step['distance']['text'],
                 "duration": step['duration']['text'],
-                "instructions": step['html_instructions'],
-                "maneuver": step.get('maneuver', "")
+                "instructions": step.get('html_instructions', ''),
+                "polyline": step['polyline']['points'] if 'polyline' in step else ""
             }
-
+            # Handle sub-steps recursively
+            if 'steps' in step:
+                step_info["sub_steps"] = [extract_step_info(sub_step) for sub_step in step['steps']]
             if step['travel_mode'] == 'WALKING':
                 step_info["walking_details"] = {
                     "start_location": {
@@ -114,20 +116,17 @@ def main(origin, destination):
             elif step['travel_mode'] == 'TRANSIT':
                 transit = step['transit_details']
                 line = transit['line']
-                
-                # Güvenli şekilde değerleri alıyoruz, eksik olursa varsayılan değerler kullanıyoruz
-                vehicle_type = "BUS"  # Varsayılan
+                vehicle_type = "BUS"
                 try:
                     vehicle_type = line.get('vehicle', {}).get('type', 'BUS').upper()
                 except (KeyError, AttributeError):
                     pass
-                
                 step_info["transit_details"] = {
                     "line": {
                         "name": get_safe_value(line, 'name', 'Unknown Route'),
                         "short_name": get_safe_value(line, 'short_name', 'N/A'),
                         "vehicle_type": vehicle_type,
-                        "color": get_safe_value(line, 'color', '#000000')  # Default black if no color
+                        "color": get_safe_value(line, 'color', '#000000')
                     },
                     "departure_stop": {
                         "name": transit['departure_stop']['name'],
@@ -148,16 +147,14 @@ def main(origin, destination):
                     "num_stops": transit.get('num_stops', 0),
                     "headsign": transit.get('headsign', '')
                 }
-
-            result["steps"].append(step_info)
+            return step_info
+        result["steps"] = [extract_step_info(step) for step in steps]
 
         # Tüm değerleri kontrol et, null yerine boş string veya varsayılan değerler kullan
         for step in result["steps"]:
             for key, value in list(step.items()):
                 if value is None:
-                    if key == "maneuver":
-                        step[key] = ""
-                    elif key == "instructions":
+                    if key == "instructions":
                         step[key] = "Yol tarifi bulunmuyor"
             
             # Transit detayları null kontrolü

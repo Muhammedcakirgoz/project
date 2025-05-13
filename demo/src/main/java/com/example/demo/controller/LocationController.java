@@ -32,6 +32,16 @@ public class LocationController {
                 .body(created);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Location> updateLocation(
+            @PathVariable Long id,
+            @Valid @RequestBody LocationRequest req,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        Location updated = locationService.updateLocation(id, req, userDetails.getUsername());
+        return ResponseEntity.ok(updated);
+    }
+
     @GetMapping
     public ResponseEntity<List<Location>> listLocations(
             @AuthenticationPrincipal UserDetails userDetails) {

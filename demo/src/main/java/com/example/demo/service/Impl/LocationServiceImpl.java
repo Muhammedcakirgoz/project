@@ -45,30 +45,41 @@ public class LocationServiceImpl implements LocationService {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı!"));
 
-        Location loc;
-        if (req.getId() != null) {
-            // Eğer id varsa, önce veritabanında var mı bak
-            loc = locationRepository.findById(req.getId()).orElse(new Location());
-        } else {
-            loc = new Location();
+        Location loc = new Location();
+        loc.setName(req.getName());
+        loc.setLatitude(req.getLatitude());
+        loc.setLongitude(req.getLongitude());
+        loc.setAddress(req.getAddress() != null ? req.getAddress() : "");
+        loc.setNotes(req.getNotes());
+
+        if (req.getTimestamp() != null && !req.getTimestamp().isEmpty()) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                Date timestamp = sdf.parse(req.getTimestamp());
+                loc.setTimestamp(timestamp);
+            } catch (Exception e) {
+                System.out.println("Timestamp parse edilemedi: " + e.getMessage());
+            }
         }
+
+        loc.setUser(user);
+        return locationRepository.save(loc);
+    }
+
+    @Override
+    public Location updateLocation(Long id, LocationRequest req, String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı!"));
+
+        Location loc = locationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Location not found with id: " + id));
 
         loc.setName(req.getName());
         loc.setLatitude(req.getLatitude());
         loc.setLongitude(req.getLongitude());
+        loc.setAddress(req.getAddress() != null ? req.getAddress() : "");
+        loc.setNotes(req.getNotes());
 
-        // Yeni alanları ekle
-        if (req.getAddress() != null) {
-            loc.setAddress(req.getAddress());
-        } else {
-            loc.setAddress("");
-        }
-
-        if (req.getNotes() != null) {
-            loc.setNotes(req.getNotes());
-        }
-
-        // Timestamp ile ilgili kısım
         if (req.getTimestamp() != null && !req.getTimestamp().isEmpty()) {
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
